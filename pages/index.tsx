@@ -9,7 +9,7 @@ import Modal from '../components/modal'
 import styles from '../styles/index.module.scss'
 import { PrismaClient } from '@prisma/client'
 
-export async function getStaticProps () {
+export async function getServerSideProps () {
   const prisma = new PrismaClient()
   const data = await prisma.task.findMany()
   const tasks = JSON.parse(JSON.stringify(data));
