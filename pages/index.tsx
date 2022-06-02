@@ -7,9 +7,20 @@ import Priority_Button from '../components/atom/priority_button'
 import Status_Button from '../components/atom/status_button'
 import Modal from '../components/modal'
 import styles from '../styles/index.module.scss'
+import { PrismaClient } from '@prisma/client'
 
-const Home: NextPage = () => {
+export async function getStaticProps () {
+  const prisma = new PrismaClient()
+  const data = await prisma.task.findMany()
+  const tasks = JSON.parse(JSON.stringify(data));
+  return { 
+    props : { tasks }
+  }
+}
+
+const Home: NextPage = ({tasks}) => {
   const [IsModal, setIsModal] = useState(false);
+  console.log(tasks);
 
   return (
     <>
@@ -36,15 +47,18 @@ const Home: NextPage = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className={styles.table_td}>UIデザイン</td>
-                  <td className={styles.table_td}>2022/11/11</td>
-                  <td className={styles.table_td}>2022/11/11</td>
-                  <td className={styles.table_td}><Priority_Button /></td>
-                  <td className={styles.table_td}><Status_Button /></td>
+                {tasks.map((task: any, index: number) => (
+                  <tr key={index}>
+                  <td className={styles.table_td}>{task.title}</td>
+                  <td className={styles.table_td}>{task.start_date}</td>
+                  <td className={styles.table_td}>{task.end_date}</td>
+                  <td className={styles.table_td}><Priority_Button priority = {task.priority} /></td>
+                  <td className={styles.table_td}><Status_Button status = {task.status} /></td>
                   <td className={styles.table_td}><img src="/delete.png" width="25px" height="25px" className={styles.action_image} /></td>
                   <td className={styles.table_td}><img src="/edit.png" width="20px" height="20px" className={styles.action_image} /></td>
-                </tr>
+                  </tr>
+                ))}
+                
               </tbody>
             </table>
           </div>
