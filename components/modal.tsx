@@ -1,50 +1,47 @@
 
 import { useState } from 'react';
-import type { NextApiRequest, NextApiResponse } from 'next'
-import Todo from '../src/types/Todo';
 import styles from '../styles/index.module.scss'
-import prisma from '../lib/prisma'
-import { getServerSideProps } from '../pages';
-import type { NextApiHandler } from 'next';
+import Router from 'next/router';
 
 export default function Modal (props: any) {
 
     const { IsModal, setIsModal } = props;
-    const [ todo, setTodo ] = useState<Todo>({
-        id: 0,
+    let today = new Date();
+    const year = today.getFullYear();
+    const month = ("0" + (today.getMonth() + 1)).slice(-2);
+    const date = ("0" + today.getDate()).slice(-2);
+    const default_date = `${year}-${month}-${date}T00:00:00.000Z`;
+
+    const [ todo, setTodo ] = useState({
         title: "",
         detail: "",
-        start_date: "",
-        end_date: "",
-        priority: "",
-    })
+        start_date: default_date,
+        end_date: default_date,
+        priority: "Low",
+    });
+    // console.log(todo)
 
     const handleCloseModal = () => {
         setIsModal(false);
     }
 
-    // const handleSaveTodo: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-        const handleSaveTodo = async () => {
-        console.log(todo)
-        // try {
-            await prisma.task.create({
-                data: {
-                    title: todo.title,
-                    detail: todo.detail,
-                    start_date: todo.start_date,
-                    end_date: todo.end_date,
-                    priority: todo.priority,
-                }
-            })
-            // res.status(200).send("ok");
-        // } catch (error) {
-        //     alert("I couldn't save new todo, sorry.");
-        //     res.status(500).json(error)
-        // }
-
-        await getServerSideProps();
+    const handleSaveTodo = async () => {
+        // console.log(todo)
+        const res = await fetch("/api/createTodo", {
+            method: "POST",
+            body: JSON.stringify(todo),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const json = await res.json();
+        if (json.ok) {
+        Router.push("/");
         setIsModal(false);
-    }
+        } else {
+        alert(JSON.stringify(json));
+        }
+    };
 
 
     return (
@@ -76,12 +73,12 @@ export default function Modal (props: any) {
             <div className={styles.date_flex}>
                 <div className={styles.date_box}>
                 <p className={styles.todo_label}>Start Date</p>
-                <input type="date" className={styles.date_form}  onChange={(e) => (setTodo({...todo, start_date: e.target.value}))}></input>
+                <input type="date" className={styles.date_form} onChange={(e) => (setTodo({...todo, start_date: `${e.target.value}T00:00:00.000Z`}))}></input>
                 </div>
 
                 <div className={styles.date_box}>
                 <p className={styles.todo_label}>End Date</p>
-                <input type="date" className={styles.date_form} onChange={(e) => (setTodo({...todo, end_date: e.target.value}))}></input>
+                <input type="date" className={styles.date_form} onChange={(e) => (setTodo({...todo, end_date: `${e.target.value}T00:00:00.000Z`}))}></input>
                 </div>
             </div>
 

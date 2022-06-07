@@ -7,10 +7,12 @@ import Priority_Button from '../components/atom/priority_button'
 import Status_Button from '../components/atom/status_button'
 import Modal from '../components/modal'
 import styles from '../styles/index.module.scss'
-import { PrismaClient } from '@prisma/client'
+import prisma from "../lib/prisma";
+import Router from 'next/router'
+import Todo from "../src/types/Todo"
+import Modal_Edit from '../components/modal_edit'
 
 export async function getServerSideProps () {
-  const prisma = new PrismaClient()
   const data = await prisma.task.findMany()
   const tasks = JSON.parse(JSON.stringify(data));
   return { 
@@ -20,7 +22,29 @@ export async function getServerSideProps () {
 
 const Home: NextPage = ({tasks}) => {
   const [IsModal, setIsModal] = useState(false);
-  console.log(tasks);
+  const [IsModalEdit, setIsModalEdit] = useState(false);
+  const [editTodo, setEditTodo] = useState({});
+  
+  const handleDelete = async(id: number) => {
+    const res = await fetch("/api/deleteTodo", {
+      method: "POST",
+      body: JSON.stringify(id),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const json = await res.json();
+    if (json.ok) {
+    Router.push("/");
+    } else {
+    alert(JSON.stringify(json));
+    }
+  }
+
+  const handleOpenModalEdit = (task: Todo) => {
+    setIsModalEdit(true);
+    setEditTodo(task);
+  }
 
   return (
     <>
@@ -50,12 +74,12 @@ const Home: NextPage = ({tasks}) => {
                 {tasks.map((task: any, index: number) => (
                   <tr key={index}>
                   <td className={styles.table_td}>{task.title}</td>
-                  <td className={styles.table_td}>{task.start_date}</td>
-                  <td className={styles.table_td}>{task.end_date}</td>
+                  <td className={styles.table_td}>{task.start_date.slice(0,10)}</td>
+                  <td className={styles.table_td}>{task.end_date.slice(0,10)}</td>
                   <td className={styles.table_td}><Priority_Button priority = {task.priority} /></td>
                   <td className={styles.table_td}><Status_Button status = {task.status} /></td>
-                  <td className={styles.table_td}><img src="/delete.png" width="25px" height="25px" className={styles.action_image} /></td>
-                  <td className={styles.table_td}><img src="/edit.png" width="20px" height="20px" className={styles.action_image} /></td>
+                  <td className={styles.table_td} onClick={() => handleDelete(task.id)}><img src="/delete.png" width="25px" height="25px" className={styles.action_image} /></td>
+                  <td className={styles.table_td} onClick={() => handleOpenModalEdit(task)}><img src="/edit.png" width="20px" height="20px" className={styles.action_image} /></td>
                   </tr>
                 ))}
                 
@@ -65,6 +89,7 @@ const Home: NextPage = ({tasks}) => {
       </div>
 
       { IsModal &&  <Modal IsModal = {IsModal} setIsModal = {setIsModal} /> }
+      { IsModalEdit &&  <Modal_Edit IsModalEdit = {IsModalEdit} setIsModalEdit = {setIsModalEdit} editTodo = {editTodo}/> }
 
     </>
   )
