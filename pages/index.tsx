@@ -1,20 +1,21 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import NewTodo_Button from '../components/atom/newTodo_button'
-import Priority_Button from '../components/atom/priority_button'
-import Status_Button from '../components/atom/status_button'
 import Modal from '../components/modal'
 import styles from '../styles/index.module.scss'
 import prisma from "../lib/prisma";
 import Router from 'next/router'
 import Todo from "../src/types/Todo"
 import Modal_Edit from '../components/modal_edit'
+import Priority_PullDown from '../components/atom/priority_pulldown'
+import Status_PullDown from '../components/atom/status_pulldown'
 
 export async function getServerSideProps () {
   const data = await prisma.task.findMany()
-  const tasks = JSON.parse(JSON.stringify(data));
+  const tasks = JSON.parse(JSON.stringify(data)).sort((a, b) => {
+    return (a.id < b.id) ? -1 : 1;
+  });
   return { 
     props : { tasks }
   }
@@ -76,8 +77,8 @@ const Home: NextPage = ({tasks}) => {
                   <td className={styles.table_td}>{task.title}</td>
                   <td className={styles.table_td}>{task.start_date.slice(0,10)}</td>
                   <td className={styles.table_td}>{task.end_date.slice(0,10)}</td>
-                  <td className={styles.table_td}><Priority_Button priority = {task.priority} /></td>
-                  <td className={styles.table_td}><Status_Button status = {task.status} /></td>
+                  <td className={styles.table_td}><Priority_PullDown priority = {task.priority} todo = {task} /></td>
+                  <td className={styles.table_td}><Status_PullDown status = {task.status} todo = {task} /></td>
                   <td className={styles.table_td} onClick={() => handleDelete(task.id)}><img src="/delete.png" width="25px" height="25px" className={styles.action_image} /></td>
                   <td className={styles.table_td} onClick={() => handleOpenModalEdit(task)}><img src="/edit.png" width="20px" height="20px" className={styles.action_image} /></td>
                   </tr>
