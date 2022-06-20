@@ -14,7 +14,7 @@ export default function Modal_Edit (props: any) {
         detail: editTodo.detail,
         start_date: editTodo.start_date,
         end_date: editTodo.end_date,
-        priority: "Low",
+        priority: editTodo.priority,
     });
 
     const handleCloseModal = () => {
@@ -59,7 +59,7 @@ export default function Modal_Edit (props: any) {
 
             <div className={styles.date_box}>
                 <p className={styles.todo_label}>priority</p>
-                <select className={styles.date_form} value={todo.priority} onChange={(e) => (setTodo({...todo, detail: e.target.value}))}>
+                <select className={styles.date_form} value={todo.priority} onChange={(e) => (setTodo({...todo, priority: e.target.value}))}>
                     <option value="Low">Low</option>
                     <option value="Middle">Middle</option>
                     <option value="High">High</option>
