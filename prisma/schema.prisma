@@ -18,6 +18,7 @@ model Task {
   end_date    DateTime @default(now())
   priority    String   @default("Low")
   status      String   @default("Waiting")
+  user_email  String   
 
   @@map("tasks")
 }

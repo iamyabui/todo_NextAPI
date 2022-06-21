@@ -25,10 +25,15 @@ export async function getServerSideProps () {
 export default function Session(props: any) {
   const { tasks } = props;
   const { data: session } = useSession()
+  const user_email = session?.user?.email;
   const [IsModal, setIsModal] = useState(false);
   const [IsModalEdit, setIsModalEdit] = useState(false);
   const [editTodo, setEditTodo] = useState({});
-  
+
+  const my_todo = tasks.filter(function(task: Todo) {
+    return task.user_email == user_email
+  })
+
   const handleDelete = async(id: number) => {
     const res = await fetch("/api/deleteTodo", {
       method: "POST",
@@ -80,7 +85,7 @@ export default function Session(props: any) {
                   </tr>
                 </thead>
                 <tbody>
-                  {tasks.map((task: any, index: number) => (
+                  {my_todo.map((task: any, index: number) => (
                     <tr key={index}>
                     <td className={styles.table_td}>{task.title}</td>
                     <td className={styles.table_td}>{task.start_date.slice(0,10)}</td>
@@ -97,15 +102,15 @@ export default function Session(props: any) {
             </div>
         </div>
 
-        { IsModal &&  <Modal IsModal = {IsModal} setIsModal = {setIsModal} /> }
+        { IsModal &&  <Modal IsModal = {IsModal} setIsModal = {setIsModal} user_email = {user_email} /> }
         { IsModalEdit &&  <Modal_Edit IsModalEdit = {IsModalEdit} setIsModalEdit = {setIsModalEdit} editTodo = {editTodo}/> }
       </>
     )
   }
   return (
-    <>
-      Not signed in <br />
+    <div className={styles.signOut_display}>
+      <p>Welcome to Todo List application!!</p>
       <button onClick={() => signIn()}>Sign in</button>
-    </>
+    </div>
   )
 }
