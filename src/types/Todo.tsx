@@ -5,6 +5,7 @@ type Todo = {
     start_date: string;
     end_date: string;
     priority: string;
+    user_email: string;
 }
 
 export default Todo;

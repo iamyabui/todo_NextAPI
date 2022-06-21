@@ -15,6 +15,7 @@ export default function Modal_Edit (props: any) {
         start_date: editTodo.start_date,
         end_date: editTodo.end_date,
         priority: editTodo.priority,
+        user_email: editTodo.user_email,
     });
 
     const handleCloseModal = () => {

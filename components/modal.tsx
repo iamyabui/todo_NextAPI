@@ -5,7 +5,7 @@ import Router from 'next/router';
 
 export default function Modal (props: any) {
 
-    const { IsModal, setIsModal } = props;
+    const { IsModal, setIsModal, user_email } = props;
     let today = new Date();
     const year = today.getFullYear();
     const month = ("0" + (today.getMonth() + 1)).slice(-2);
@@ -18,6 +18,7 @@ export default function Modal (props: any) {
         start_date: default_date,
         end_date: default_date,
         priority: "Low",
+        user_email: user_email,
     });
     // console.log(todo)
 

@@ -16,6 +16,26 @@
     margin-right: 10px;
 }
 
+.signOut_display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10rem;
+    flex-direction: column;
+}
+
+.signOut_display > p {
+    font-size: larger;
+}
+
+
+.signOut_display > button {
+    background-color: skyblue;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
 .main {
     margin: 50px 100px 50px 100px;
 }
