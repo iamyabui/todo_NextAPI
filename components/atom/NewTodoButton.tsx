@@ -1,6 +1,6 @@
 import styles from '../../styles/button.module.scss'
 
-export default function NewTodo_Button (props: any) {
+export default function NewTodoButton (props: any) {
 
     const { setIsModal } = props;
     const handleOpenNewTodo = () => {

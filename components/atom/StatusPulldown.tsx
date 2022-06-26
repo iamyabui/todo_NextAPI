@@ -1,7 +1,7 @@
 import Router from 'next/router';
 import styles from '../../styles/button.module.scss'
 
-export default function Status_PullDown (props: any) {
+export default function StatusPullDown (props: any) {
     const { status, todo } = props;
 
     const handleUpdateStatus = async(e: any) => {
