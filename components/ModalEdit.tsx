@@ -1,12 +1,17 @@
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import styles from '../styles/index.module.scss'
 import Router from 'next/router';
 import Todo from '../src/types/Todo';
 
-export default function Modal_Edit (props: any) {
+type Props = {
+    setIsModalEdit: Dispatch<SetStateAction<boolean>>
+    editTodo: Todo
+}
 
-    const { IsModalEdit, setIsModalEdit, editTodo } = props;
+const ModalEdit: React.FC<Props> = (props) => {
+
+    const { setIsModalEdit, editTodo } = props;
 
     const [ todo, setTodo ] = useState({
         id: editTodo.id,
@@ -15,6 +20,7 @@ export default function Modal_Edit (props: any) {
         start_date: editTodo.start_date,
         end_date: editTodo.end_date,
         priority: editTodo.priority,
+        status: editTodo.status,
         user_email: editTodo.user_email,
     });
 
@@ -50,12 +56,20 @@ export default function Modal_Edit (props: any) {
 
             <div className={styles.modal_box}>
                 <p className={styles.todo_label}>Title</p>
-                <input type="text" className={styles.todo_form} value={todo.title} onChange={(e) => (setTodo({...todo, title: e.target.value}))}></input>
+                <input 
+                    type="text" 
+                    className={styles.todo_form} 
+                    value={todo.title} 
+                    onChange={(e) => (setTodo({...todo, title: e.target.value}))}></input>
             </div>
 
             <div className={styles.modal_box}>
                 <p className={styles.todo_label}>Detail</p>
-                <textarea className={styles.detail_form} value={todo.detail} onChange={(e) => (setTodo({...todo, detail: e.target.value}))}></textarea>
+                <textarea 
+                    className={styles.detail_form} 
+                    value={todo.detail} 
+                    onChange={(e) => (setTodo({...todo, detail: e.target.value}))}>
+                </textarea>
             </div>
 
             <div className={styles.date_box}>
@@ -70,12 +84,22 @@ export default function Modal_Edit (props: any) {
             <div className={styles.date_flex}>
                 <div className={styles.date_box}>
                 <p className={styles.todo_label}>Start Date</p>
-                <input type="date" className={styles.date_form} value={todo.start_date.slice(0,10)} onChange={(e) => (setTodo({...todo, start_date: `${e.target.value}T00:00:00.000Z`}))}></input>
+                <input 
+                    type="date" 
+                    className={styles.date_form} 
+                    value={todo.start_date.slice(0,10)} 
+                    onChange={(e) => (setTodo({...todo, start_date: `${e.target.value}T00:00:00.000Z`}))}>
+                </input>
                 </div>
 
                 <div className={styles.date_box}>
                 <p className={styles.todo_label}>End Date</p>
-                <input type="date" className={styles.date_form} value={todo.end_date.slice(0,10)} onChange={(e) => (setTodo({...todo, end_date: `${e.target.value}T00:00:00.000Z`}))}></input>
+                <input 
+                    type="date" 
+                    className={styles.date_form} 
+                    value={todo.end_date.slice(0,10)} 
+                    onChange={(e) => (setTodo({...todo, end_date: `${e.target.value}T00:00:00.000Z`}))}>
+                </input>
                 </div>
             </div>
 
@@ -84,3 +108,5 @@ export default function Modal_Edit (props: any) {
         </div>
     )
 }
+
+export default ModalEdit;

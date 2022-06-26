@@ -1,7 +1,7 @@
 import Router from 'next/router';
 import styles from '../../styles/button.module.scss'
 
-export default function Priority_PullDown (props: any) {
+export default function PriorityPullDown (props: any) {
     const { priority, todo } = props;
 
     const handleUpdatePriority = async(e: any) => {

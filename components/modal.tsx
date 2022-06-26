@@ -1,11 +1,16 @@
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import styles from '../styles/index.module.scss'
 import Router from 'next/router';
 
-export default function Modal (props: any) {
+type Props = {
+    setIsModal: Dispatch<SetStateAction<boolean>>
+    user_email: string | undefined | null
+}
 
-    const { IsModal, setIsModal, user_email } = props;
+const Modal: React.FC<Props> = (props) => {
+
+    const { setIsModal, user_email } = props;
     let today = new Date();
     const year = today.getFullYear();
     const month = ("0" + (today.getMonth() + 1)).slice(-2);
@@ -20,14 +25,12 @@ export default function Modal (props: any) {
         priority: "Low",
         user_email: user_email,
     });
-    // console.log(todo)
 
     const handleCloseModal = () => {
         setIsModal(false);
     }
 
     const handleSaveTodo = async () => {
-        // console.log(todo)
         const res = await fetch("/api/createTodo", {
             method: "POST",
             body: JSON.stringify(todo),
@@ -88,3 +91,5 @@ export default function Modal (props: any) {
         </div>
     )
 }
+
+export default Modal;

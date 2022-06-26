@@ -5,6 +5,7 @@ type Todo = {
     start_date: string;
     end_date: string;
     priority: string;
+    status: string;
     user_email: string;
 }
 
