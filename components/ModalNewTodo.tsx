@@ -8,7 +8,7 @@ type Props = {
     user_email: string | undefined | null
 }
 
-const Modal: React.FC<Props> = (props) => {
+const ModalNewTodo: React.FC<Props> = (props) => {
 
     const { setIsModal, user_email } = props;
     let today = new Date();
@@ -92,4 +92,4 @@ const Modal: React.FC<Props> = (props) => {
     )
 }
 
-export default Modal;
+export default ModalNewTodo;

@@ -10,7 +10,7 @@ import ModalEdit from '../components/ModalEdit'
 import PriorityPullDown from '../components/atom/PriorityPulldown'
 import StatusPullDown from '../components/atom/StatusPulldown'
 import { PrismaClient } from "@prisma/client";
-import Modal from "../components/Modal";
+import ModalNewTodo from "../components/ModalNewTodo";
 
 export async function getServerSideProps () {
 
@@ -140,7 +140,7 @@ const TodoList: React.FC<Props> = (props) => {
         </div>
       </div>
 
-      { IsModal &&  <Modal setIsModal = {setIsModal} user_email = {user_email} /> }
+      { IsModal &&  <ModalNewTodo setIsModal = {setIsModal} user_email = {user_email} /> }
       { IsModalEdit &&  <ModalEdit setIsModalEdit = {setIsModalEdit} editTodo = {editTodo}/> }
     </>
     )}
