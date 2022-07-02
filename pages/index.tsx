@@ -2,7 +2,6 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from 'react'
 import Head from 'next/head'
 import NewTodoButton from '../components/atom/NewTodoButton'
-import Modal from '../components/Modal'
 import styles from '../styles/index.module.scss'
 import prisma from "../lib/prisma";
 import Router from 'next/router'
@@ -11,6 +10,7 @@ import ModalEdit from '../components/ModalEdit'
 import PriorityPullDown from '../components/atom/PriorityPulldown'
 import StatusPullDown from '../components/atom/StatusPulldown'
 import { PrismaClient } from "@prisma/client";
+import Modal from "../components/Modal";
 
 export async function getServerSideProps () {
 
@@ -24,7 +24,7 @@ export async function getServerSideProps () {
     }
     prisma = global.prisma
   }
-  
+
   const data = await prisma.task.findMany({
     orderBy: [
       {
