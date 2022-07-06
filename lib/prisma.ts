@@ -12,7 +12,6 @@ declare global {
   var prisma: PrismaClient;
 }
 
-if (typeof window === "undefined") {
   if (process.env.NODE_ENV === "production") {
     prisma = new PrismaClient();
   } else {
@@ -22,6 +21,5 @@ if (typeof window === "undefined") {
 
     prisma = global.prisma;
   }
-}
 
 export default prisma;
